@@ -9,10 +9,6 @@ import threading
 import time
 import http.server
 import socketserver
-try:
-    import thread
-except:
-    import _thread as thread
 exitFlag = 0
 
 os.system('ipconfig/flushdns')
@@ -28,34 +24,36 @@ def webFilter():
 
     website_list = []
     try:
-        print("in web filter")
-        if False: #comment out reading in websites
-            with open('csv.txt', newline='') as csvfile:
-                count =0
-                #read in lines from file
+        with open('csv.txt', newline='') as csvfile:
+            count =0
+            #read in lines from file
 
-                lines = csvfile.readlines()
-                sites = [line.strip() for line in lines]
-                print("in web filter")
-                # remove header lines from array
-                sites = sites[lines_in_header:]
-                for site in sites:
+            lines = csvfile.readlines()
+            sites = [line.strip() for line in lines]
 
+            # remove header lines from array
+            sites = sites[lines_in_header:]
+            sites =  sites[:10]
+            for site in sites:
 
-                    # Data process site to be an array of arrays of site info
-                    site = site.replace('"', '')
-                    site=site.split(",")
+                print(site)
+                print()
+                # Data process site to be an array of arrays of site info
+                site = site.replace('"', '')
+                site=site.split(",")
 
-                    #Format for site = [id,dateadded,url,url_status,threat,tags,urlhaus_link,reporter]
-                    #example site =
-                    #['1068863', '2021-03-15 14:22:05', 'http://59.99.143.111:33869/bin.sh',
-                    #'offline', 'malware_download', '32-bit', 'elf', 'mips', 'https://urlhaus.abuse.ch/url/1068863/', 'geenensp']
+                #Format for site = [id,dateadded,url,url_status,threat,tags,urlhaus_link,reporter]
+                #example site =
+                #['1068863', '2021-03-15 14:22:05', 'http://59.99.143.111:33869/bin.sh',
+                #'offline', 'malware_download', '32-bit', 'elf', 'mips', 'https://urlhaus.abuse.ch/url/1068863/', 'geenensp']
 
-                    if site[3] == "online":
-                        website_list.append(site[2])
+                if site[3] == "online":
+                    website_list.append(site[2])
     except:
         print("[ ERROR ] Could not read in blocked websites. ")
         exit(-1)
+    for site in website_list:
+        print(site)
 
     # websites that we can visit to test
     test_list = ["www.facebook.com","facebook.com",
@@ -122,4 +120,4 @@ def webFilter():
 
 
 webFilter()
-print("[ INFO exited web filter")
+#print("[ INFO exited web filter")
